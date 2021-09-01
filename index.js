@@ -1,20 +1,11 @@
 const axios = require('axios');
 const express = require('express');
+
 const packageJson = require('./package.json');
 
 const { Telegraf } = require('telegraf');
 
 require('dotenv').config();
-
-const app = express();
-
-app.get('/', (req, res) => {
-  res.send({ appVersion: packageJson.version });
-});
-
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Listening at ${process.env.PORT}`);
-});
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
@@ -48,11 +39,6 @@ bot.command('blog', async (ctx) => {
   }
 });
 
-// bot.hears('blog status', (ctx, next) => {
-//   console.log(ctx.from);
-//   bot.telegram.sendMessage(ctx.chat.id, 'The blog status is');
-// });
-
 bot.launch();
 
 async function getCurrentBlogStatus() {
@@ -62,6 +48,7 @@ async function getCurrentBlogStatus() {
 async function checkForCurrentStatus() {
   try {
     const currentStatus = await getCurrentBlogStatus();
+    console.log('current status', currentStatus);
     if (currentStatus !== 200) {
       bot.telegram.sendMessage(
         '-482183948',
@@ -73,4 +60,17 @@ async function checkForCurrentStatus() {
   }
 }
 
-checkForCurrentStatus();
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send({ appVersion: packageJson.version });
+});
+
+app.post('/check-blog-status', (req, res) => {
+  checkForCurrentStatus();
+  res.status(200).send({ ok: true });
+});
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Listening at ${process.env.PORT}`);
+});
