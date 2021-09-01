@@ -11,7 +11,7 @@ bot.command('start', (ctx) => {
   console.log(ctx.from);
   bot.telegram.sendMessage(
     ctx.chat.id,
-    'Bem vindo ao bot que está sempre ao seu dispor.',
+    'Bem vindo ao bot que está sempre ao seu dispor!',
     {}
   );
 });
