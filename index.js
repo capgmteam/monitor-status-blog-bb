@@ -1,7 +1,20 @@
 const axios = require('axios');
+const express = require('express');
+const packageJson = require('./package.json');
+
 const { Telegraf } = require('telegraf');
 
 require('dotenv').config();
+
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send({ appVersion: packageJson.version });
+});
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Listening at ${process.env.PORT}`);
+});
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
