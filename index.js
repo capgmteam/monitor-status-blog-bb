@@ -54,6 +54,11 @@ async function checkForCurrentStatus() {
         '-482183948',
         `⚠️⚠️⚠️ 🚨🚨🚨 Oops! Algo não está certo. O blog retornou o status: ${currentStatus} !! 😨`
       );
+    } else {
+      bot.telegram.sendMessage(
+        '-482183948',
+        `O status do blog no momento é: ${currentStatus} - Tudo certo! 😁`
+      );
     }
   } catch (error) {
     console.log('erro ao verificar status do blog', error);
