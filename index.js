@@ -25,23 +25,23 @@ const botSendMessage = (chatId, message) => {
   bot.telegram.sendMessage(chatId, message);
 };
 
-const getBlogErrorMessage = (status) =>
-  `⚠️⚠️⚠️ 🚨🚨🚨 Oops! Algo não está certo. O blog retornou o status: ${status} !! 😨 ⚠️⚠️⚠️ 🚨🚨🚨`;
-const getBlogSuccessMessage = (status) =>
-  `O status do blog no momento é: ${status} - Tudo certo! 😁`;
+const getBlogMessage = (status) => ({
+  error: `⚠️⚠️⚠️ 🚨🚨🚨 Oops! Algo não está certo. O blog retornou o status: ${status} !! 😨 ⚠️⚠️⚠️ 🚨🚨🚨`,
+  success: `O status do blog no momento é: ${status} - Tudo certo! 😁`,
+});
 
-const getBlogApiErrorMessage = (status) =>
-  `⚠️⚠️⚠️ 🚨🚨🚨 Oops! Algo não está certo. A API do BLOG retornou o status: ${status} !! 😨 ⚠️⚠️⚠️ 🚨🚨🚨`;
-const getBlogApiSuccessMessage = (status) =>
-  `O status da API do blog no momento é: ${status} - Tudo certo! 😁`;
+const getBlogApiMessage = (status) => ({
+  error: `⚠️⚠️⚠️ 🚨🚨🚨 Oops! Algo não está certo. A API do BLOG retornou o status: ${status} !! 😨 ⚠️⚠️⚠️ 🚨🚨🚨`,
+  success: `O status da API do blog no momento é: ${status} - Tudo certo! 😁`,
+});
 
 bot.command('blog', async (ctx) => {
   try {
     const currentStatus = await getCurrentBlogStatus();
     if (currentStatus !== 200) {
-      botSendMessage(ctx.chat.id, getBlogErrorMessage(currentStatus));
+      botSendMessage(ctx.chat.id, getBlogMessage(currentStatus).error);
     } else {
-      botSendMessage(ctx.chat.id, getBlogSuccessMessage(currentStatus));
+      botSendMessage(ctx.chat.id, getBlogMessage(currentStatus).success);
     }
   } catch (error) {
     if (
@@ -50,7 +50,7 @@ bot.command('blog', async (ctx) => {
       error.response.data &&
       error.response.data.statusCode
     ) {
-      botSendMessage(ctx.chat.id, getBlogErrorMessage(error.response.data.statusCode));
+      botSendMessage(ctx.chat.id, getBlogMessage(error.response.data.statusCode).error);
     } else {
       console.log('erro ao verificar status do blog', error);
     }
@@ -61,9 +61,9 @@ bot.command('api', async (ctx) => {
   try {
     const currentStatus = await getCurrentBlogApiStatus();
     if (currentStatus !== 200 && currentStatus !== 401) {
-      botSendMessage(ctx.chat.id, getBlogApiErrorMessage(currentStatus));
+      botSendMessage(ctx.chat.id, getBlogApiMessage(currentStatus).error);
     } else {
-      botSendMessage(ctx.chat.id, getBlogApiSuccessMessage(currentStatus));
+      botSendMessage(ctx.chat.id, getBlogApiMessage(currentStatus).success);
     }
   } catch (error) {
     if (
@@ -75,12 +75,12 @@ bot.command('api', async (ctx) => {
       if (error.response.data.statusCode !== 401) {
         botSendMessage(
           ctx.chat.id,
-          getBlogApiErrorMessage(error.response.data.statusCode)
+          getBlogApiMessage(error.response.data.statusCode).error
         );
       } else {
         botSendMessage(
           ctx.chat.id,
-          getBlogApiSuccessMessage(error.response.data.statusCode)
+          getBlogApiMessage(error.response.data.statusCode).success
         );
       }
     } else {
@@ -110,7 +110,7 @@ async function checkForCurrentStatus() {
     const currentBlogStatus = await getCurrentBlogStatus();
     console.log('current blog status', currentBlogStatus);
     if (currentBlogStatus !== 200) {
-      botSendMessage('-482183948', getBlogErrorMessage(currentBlogStatus));
+      botSendMessage('-482183948', getBlogMessage(currentBlogStatus).error);
     }
   } catch (error) {
     if (
@@ -119,7 +119,7 @@ async function checkForCurrentStatus() {
       error.response.data &&
       error.response.data.statusCode
     ) {
-      botSendMessage('-482183948', getBlogErrorMessage(error.response.data.statusCode));
+      botSendMessage('-482183948', getBlogMessage(error.response.data.statusCode).error);
     } else {
       console.log('erro ao verificar status do blog', error);
     }
@@ -130,7 +130,7 @@ async function checkForCurrentStatus() {
     const currentBlogApiStatus = await getCurrentBlogApiStatus();
     console.log('current blog API status', currentBlogApiStatus);
     if (currentBlogApiStatus !== 200 && currentBlogApiStatus !== 401) {
-      botSendMessage('-482183948', getBlogApiErrorMessage(currentBlogApiStatus));
+      botSendMessage('-482183948', getBlogApiMessage(currentBlogApiStatus).error);
     }
   } catch (error) {
     if (
@@ -143,7 +143,7 @@ async function checkForCurrentStatus() {
       if (error.response.data.statusCode !== 401) {
         botSendMessage(
           '-482183948',
-          getBlogApiErrorMessage(error.response.data.statusCode)
+          getBlogApiMessage(error.response.data.statusCode).error
         );
       }
     } else {
