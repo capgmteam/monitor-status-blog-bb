@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ptcampos/monitor-status-blog-bb.git"
+    "url": "git+https://github.com/capgmteam/monitor-status-blog-bb.git"
   },
   "author": "Paulo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ptcampos/monitor-status-blog-bb/issues"
+    "url": "https://github.com/capgmteam/monitor-status-blog-bb/issues"
   },
-  "homepage": "https://github.com/ptcampos/monitor-status-blog-bb#readme",
+  "homepage": "https://github.com/capgmteam/monitor-status-blog-bb#readme",
   "dependencies": {
     "axios": "^0.21.1",
     "dotenv": "^10.0.0",
